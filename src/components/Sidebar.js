@@ -1,6 +1,7 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function Sidebar({ isOpen, onToggle }) {
@@ -18,14 +19,14 @@ export default function Sidebar({ isOpen, onToggle }) {
     setIsResizing(false);
   };
 
-  const resize = (e) => {
+  const resize = useCallback((e) => {
     if (isResizing && sidebarRef.current) {
       const newWidth = e.clientX - sidebarRef.current.getBoundingClientRect().left;
-      if (newWidth >= 200 && newWidth <= 600) { // 최소 200px, 최대 600px
+      if (newWidth >= 200 && newWidth <= 600) {
         setWidth(newWidth);
       }
     }
-  };
+  }, [isResizing]);
 
   useEffect(() => {
     window.addEventListener('mousemove', resize);
@@ -35,7 +36,7 @@ export default function Sidebar({ isOpen, onToggle }) {
       window.removeEventListener('mousemove', resize);
       window.removeEventListener('mouseup', stopResizing);
     };
-  }, [isResizing]);
+  }, [resize]);
 
   const menuItems = [
     { name: 'Overview', path: '/dashboard', icon: '🏠' },
@@ -60,7 +61,13 @@ export default function Sidebar({ isOpen, onToggle }) {
       >
         {/* Logo */}
         <div className="p-4 border-b">
-          <img src="/logo.PNG" alt="Tavily" className="h-8" />
+          <Image
+            src="/logo.PNG"
+            alt="Tavily"
+            width={32}
+            height={32}
+            priority
+          />
         </div>
 
         {/* Account Selector */}

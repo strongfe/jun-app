@@ -177,21 +177,21 @@ export default function Dashboard() {
         title="Edit API Key"
       />
       
-      // DeleteModal 컴포넌트
+      {/* DeleteModal Component */}
       <DeleteModal
-      isOpen={isDeleteModalOpen}
-      onClose={() => {
-        setIsDeleteModalOpen(false);
-        setSelectedKey(null);
-      }}
-      apiKey={selectedKey}
-      onDelete={() => {
-        if (selectedKey && selectedKey.id) {
-          handleDeleteKey(selectedKey.id);  // ID를 명시적으로 전달
-        }
-      }}
-      title="Delete API Key"
-/>
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setSelectedKey(null);
+        }}
+        apiKey={selectedKey}
+        onDelete={() => {
+          if (selectedKey && selectedKey.id) {
+            handleDeleteKey(selectedKey.id);
+          }
+        }}
+        title="Delete API Key"
+      />
 
     </div>
   );
