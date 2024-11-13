@@ -1,4 +1,5 @@
 import Image from "next/image";
+// import Image from "next/link";
 
 export default function Home() {
   return (
@@ -9,7 +10,7 @@ export default function Home() {
           src="/next.svg"
           alt="Next.js logo"
           width={180}
-          height={38}
+          height={37}
           priority
         />
         <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
@@ -31,7 +32,7 @@ export default function Home() {
             rel="noopener noreferrer"
           >
             <Image
-              className="dark:invert"
+              className="dark:invert w-auto h-auto"
               src="/vercel.svg"
               alt="Vercel logomark"
               width={20}
@@ -46,6 +47,12 @@ export default function Home() {
             rel="noopener noreferrer"
           >
             Read our docs
+          </a>
+          <a
+            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
+            href="/dashboards"
+          >
+            Go to Dashboard
           </a>
         </div>
       </main>
