@@ -59,5 +59,26 @@ export const apiKeyService = {
       console.error('Error deleting API key:', error);
       throw error;
     }
+  },
+
+  // API 키 검증
+  validateApiKey: async (apiKey) => {
+    try {
+      const { data, error } = await supabase
+        .from('api_keys')
+        .select('*')
+        .eq('key', apiKey)
+        .single();
+
+      if (error) {
+        console.error('Error validating API key:', error);
+        return false;
+      }
+
+      return !!data; // data가 있으면 true, 없으면 false 반환
+    } catch (error) {
+      console.error('Error validating API key:', error);
+      return false;
+    }
   }
 }; 

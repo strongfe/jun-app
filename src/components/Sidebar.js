@@ -1,11 +1,14 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Sidebar({ isOpen, onToggle }) {
-  const [width, setWidth] = useState(256); // 기본 너비 16 * 16 = 256px
+  const [width, setWidth] = useState(256);
   const sidebarRef = useRef(null);
   const resizeRef = useRef(null);
   const [isResizing, setIsResizing] = useState(false);
+  const router = useRouter();
 
   const startResizing = (e) => {
     setIsResizing(true);
@@ -33,6 +36,15 @@ export default function Sidebar({ isOpen, onToggle }) {
       window.removeEventListener('mouseup', stopResizing);
     };
   }, [isResizing]);
+
+  const menuItems = [
+    { name: 'Overview', path: '/dashboard', icon: '🏠' },
+    { name: 'Research Assistant', path: '/assistant', icon: '🤖' },
+    { name: 'Research Reports', path: '/reports', icon: '📄' },
+    { name: 'API Playground', path: '/playground', icon: '⚡' },
+    { name: 'Invoices', path: '/invoices', icon: '📋' },
+    { name: 'Documentation', path: '/docs', icon: '📚', external: true }
+  ];
 
   return (
     <div className="relative">
@@ -62,43 +74,30 @@ export default function Sidebar({ isOpen, onToggle }) {
         {/* Navigation Links */}
         <nav className="p-4 flex-1 overflow-y-auto">
           <ul className="space-y-2">
-            <li>
-              <a href="#" className="flex items-center px-3 py-2 text-blue-600 bg-blue-50 rounded-md">
-                <span className="mr-3">🏠</span>
-                <span className="whitespace-nowrap">Overview</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-                <span className="mr-3">🤖</span>
-                Research Assistant
-              </a>
-            </li>
-            <li>
-              <a href="#" className="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-                <span className="mr-3">📄</span>
-                Research Reports
-              </a>
-            </li>
-            <li>
-              <a href="#" className="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-                <span className="mr-3">⚡</span>
-                API Playground
-              </a>
-            </li>
-            <li>
-              <a href="#" className="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-                <span className="mr-3">📋</span>
-                Invoices
-              </a>
-            </li>
-            <li>
-              <a href="#" className="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-                <span className="mr-3">📚</span>
-                Documentation
-                <span className="ml-1">↗</span>
-              </a>
-            </li>
+            {menuItems.map((item) => (
+              <li key={item.path}>
+                {item.external ? (
+                  <a
+                    href={item.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+                  >
+                    <span className="mr-3">{item.icon}</span>
+                    {item.name}
+                    <span className="ml-1">↗</span>
+                  </a>
+                ) : (
+                  <Link
+                    href={item.path}
+                    className="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+                  >
+                    <span className="mr-3">{item.icon}</span>
+                    {item.name}
+                  </Link>
+                )}
+              </li>
+            ))}
           </ul>
         </nav>
 
@@ -113,10 +112,6 @@ export default function Sidebar({ isOpen, onToggle }) {
       <button
         onClick={onToggle}
         className="absolute top-4 left-full bg-white p-2 rounded-r-md border border-l-0 shadow-md hover:bg-gray-50"
-        style={{
-          transform: isOpen ? 'translateX(0)' : 'translateX(0)',
-          transition: 'transform 0.3s ease'
-        }}
       >
         {isOpen ? '◀' : '▶'}
       </button>

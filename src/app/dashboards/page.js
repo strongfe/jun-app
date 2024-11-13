@@ -10,6 +10,8 @@ import { EyeIcon, ClipboardIcon, PencilIcon, TrashIcon } from '@heroicons/react/
 
 export default function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [visibleKeys, setVisibleKeys] = useState({});
+
   const {
     apiKeys,
     selectedKey,
@@ -27,10 +29,15 @@ export default function Dashboard() {
     showToast
   } = useApiKeys();
 
-  const handleDeleteClick = (apiKey) => {
-    console.log('Selected API key for deletion:', apiKey); // 디버깅용
-    setSelectedKey(apiKey);
-    setIsDeleteModalOpen(true);
+  const toggleKeyVisibility = (keyId) => {
+    setVisibleKeys(prev => ({
+      ...prev,
+      [keyId]: !prev[keyId]
+    }));
+  };
+
+  const formatApiKey = (key, isVisible) => {
+    return isVisible ? key : `${key.substring(0, 5)}************************`;
   };
 
   return (
@@ -85,21 +92,16 @@ export default function Dashboard() {
                         <td className="py-3">
                           <div className="flex items-center">
                             <span className="font-mono">
-                              {key.show ? key.key : 'tvly-************************'}
+                              {formatApiKey(key.key, visibleKeys[key.id])}
                             </span>
                           </div>
                         </td>
                         <td className="py-3">
                           <div className="flex space-x-3">
                             <button
-                              onClick={() => {
-                                const updatedKeys = apiKeys.map(k => 
-                                  k.id === key.id ? {...k, show: !k.show} : k
-                                );
-                                setApiKeys(updatedKeys);
-                              }}
+                              onClick={() => toggleKeyVisibility(key.id)}
                               className="p-1 hover:bg-gray-100 rounded"
-                              title="View API Key"
+                              title={visibleKeys[key.id] ? "Hide API Key" : "Show API Key"}
                             >
                               <EyeIcon className="h-5 w-5 text-gray-500" />
                             </button>
@@ -130,7 +132,8 @@ export default function Dashboard() {
                             
                             <button
                               onClick={() => {
-                                handleDeleteClick(key);
+                                setSelectedKey(key);
+                                setIsDeleteModalOpen(true);
                               }}
                               className="p-1 hover:bg-gray-100 rounded"
                               title="Delete API Key"
