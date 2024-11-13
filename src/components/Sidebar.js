@@ -60,7 +60,7 @@ export default function Sidebar({ isOpen, onToggle }) {
       >
         {/* Logo */}
         <div className="p-4 border-b">
-          <img src="/logo.svg" alt="Tavily" className="h-8" />
+          <img src="/logo.PNG" alt="Tavily" className="h-8" />
         </div>
 
         {/* Account Selector */}
